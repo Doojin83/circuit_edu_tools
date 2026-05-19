@@ -1,39 +1,37 @@
+import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider
 
-# 초기 변수 설정
-initial_alpha = 1.0
-initial_omega = 5.0
+# 웹 페이지 기본 설정
+st.set_page_config(page_title="회로 신호 분석기", layout="wide")
+st.title("시간 영역 신호와 s-평면 극점(Pole) 분석기")
+
+# 1. 왼쪽 사이드바에 UI(슬라이더) 배치
+st.sidebar.header("파라미터 조절")
+alpha = st.sidebar.slider('감쇠 상수 ($\\alpha$)', min_value=0.0, max_value=5.0, value=1.0, step=0.1)
+omega = st.sidebar.slider('각주파수 ($\\omega$)', min_value=1.0, max_value=10.0, value=5.0, step=0.1)
+
+# 2. 데이터 계산
 t = np.linspace(0, 10, 1000)
+v_t = np.exp(-alpha * t) * np.sin(omega * t)
+poles = [-alpha + 1j*omega, -alpha - 1j*omega]
 
-# 신호 및 극점 계산 함수
-def calc_signal(alpha, omega, t):
-    return np.exp(-alpha * t) * np.sin(omega * t)
+# 3. 그래프 그리기
+fig, (ax_time, ax_splane) = plt.subplots(1, 2, figsize=(14, 5))
 
-def calc_poles(alpha, omega):
-    return [-alpha + 1j*omega, -alpha - 1j*omega]
-
-# 그래프 Figure 및 Axes 설정
-fig, (ax_time, ax_splane) = plt.subplots(1, 2, figsize=(12, 5))
-plt.subplots_adjust(bottom=0.25) # 슬라이더를 위한 공간 확보
-
-# 1. 시간 영역 (Time Domain) 플롯 초기화
-v_t = calc_signal(initial_alpha, initial_omega, t)
-line_time, = ax_time.plot(t, v_t, lw=2, color='#1f77b4')
-ax_time.set_title('Time Domain: $v(t) = e^{-\\alpha t}\\sin(\\omega t)$')
+# 시간 영역 플롯
+ax_time.plot(t, v_t, lw=2, color='#1f77b4')
+ax_time.set_title(f'Time Domain: $v(t) = e^{{{-alpha}t}} \\sin({omega}t)$', fontsize=14)
 ax_time.set_xlabel('Time (t)')
 ax_time.set_ylabel('Amplitude')
 ax_time.set_xlim(0, 10)
 ax_time.set_ylim(-1.2, 1.2)
 ax_time.grid(True)
 
-# 2. 주파수 영역 (s-plane) 플롯 초기화
-poles = calc_poles(initial_alpha, initial_omega)
-# 복소수의 실수부(Real)와 허수부(Imag)를 나누어 산점도로 표시
-scatter_poles = ax_splane.scatter([p.real for p in poles], [p.imag for p in poles], 
-                                  marker='x', color='red', s=100, linewidths=2)
-ax_splane.set_title('s-plane: Poles of $V(s)$')
+# s-평면 플롯
+ax_splane.scatter([p.real for p in poles], [p.imag for p in poles], 
+                  marker='x', color='red', s=100, linewidths=2)
+ax_splane.set_title('s-plane: Poles of $V(s)$', fontsize=14)
 ax_splane.set_xlabel('Real ($\\sigma$)')
 ax_splane.set_ylabel('Imaginary ($j\\omega$)')
 ax_splane.set_xlim(-5.5, 0.5)
@@ -42,30 +40,5 @@ ax_splane.axhline(0, color='black', lw=1)
 ax_splane.axvline(0, color='black', lw=1)
 ax_splane.grid(True)
 
-# 3. 슬라이더 UI 구성
-axcolor = 'lightgoldenrodyellow'
-ax_alpha = plt.axes([0.15, 0.1, 0.65, 0.03], facecolor=axcolor)
-ax_omega = plt.axes([0.15, 0.05, 0.65, 0.03], facecolor=axcolor)
-
-s_alpha = Slider(ax_alpha, 'Alpha ($\\alpha$)', 0.0, 5.0, valinit=initial_alpha)
-s_omega = Slider(ax_omega, 'Omega ($\\omega$)', 1.0, 10.0, valinit=initial_omega)
-
-# 4. 슬라이더 업데이트 이벤트 처리 함수
-def update(val):
-    alpha = s_alpha.val
-    omega = s_omega.val
-    
-    # 시간 영역 업데이트
-    line_time.set_ydata(calc_signal(alpha, omega, t))
-    
-    # 극점 업데이트
-    new_poles = calc_poles(alpha, omega)
-    scatter_poles.set_offsets(np.c_[[p.real for p in new_poles], [p.imag for p in new_poles]])
-    
-    fig.canvas.draw_idle()
-
-# 슬라이더에 이벤트 함수 연결
-s_alpha.on_changed(update)
-s_omega.on_changed(update)
-
-plt.show()
+# 4. Streamlit 화면에 그래프 출력
+st.pyplot(fig)
