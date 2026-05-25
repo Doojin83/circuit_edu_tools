@@ -11,7 +11,7 @@ col_main, _ = st.columns([3, 1])
 
 with col_main:
     # 컬럼을 나누어 제목과 회로 이미지를 나란히 배치 (비율 4:1)
-    col_title, col_img = st.columns([4, 1])
+    col_title, col_img = st.columns([4, 2])
 
     with col_title:
         st.title("Bode Plot Analyzer: CS + SF")
@@ -23,7 +23,7 @@ with col_main:
     with col_img:
         # [해결책 1] GitHub의 웹뷰(blob) 주소를 원본 이미지(raw) 전용 주소로 변경
         raw_img_url = "https://raw.githubusercontent.com/Doojin83/circuit_edu_tools/main/circuit_diagram.png"
-        st.image(raw_img_url, width=150, caption="Circuit Layout")
+        st.image(raw_img_url, width=200, caption="Circuit Layout")
 
     # 사이드바에 슬라이더 배치
     st.sidebar.header("Circuit Parameters Setup")
