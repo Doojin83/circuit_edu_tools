@@ -3,13 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 웹 페이지 기본 설정
-st.set_page_config(page_title="회로 신호 분석기", layout="wide")
-st.title("시간 영역 신호와 s-평면 극점(Pole) 분석기")
+st.set_page_config(page_title="Circuit Signal Analyzer", layout="wide")
+st.title("Signal in Time Domain & Pole Location in s-plane")
 
 # 1. 왼쪽 사이드바에 UI(슬라이더) 배치
-st.sidebar.header("파라미터 조절")
-alpha = st.sidebar.slider('감쇠 상수 ($\\alpha$)', min_value=0.0, max_value=5.0, value=1.0, step=0.1)
-omega = st.sidebar.slider('각주파수 ($\\omega$)', min_value=1.0, max_value=10.0, value=5.0, step=0.1)
+st.sidebar.header("Adjustment of Parameters")
+alpha = st.sidebar.slider('Attenuation Factor ($\\alpha$)', min_value=0.0, max_value=5.0, value=1.0, step=0.1)
+omega = st.sidebar.slider('Angular Frequency ($\\omega$)', min_value=0.0, max_value=10.0, value=5.0, step=0.1)
 
 # 2. 데이터 계산
 t = np.linspace(0, 10, 1000)
