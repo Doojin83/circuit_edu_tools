@@ -11,7 +11,7 @@ col_main, _ = st.columns([3, 1])
 
 with col_main:
     # 컬럼을 나누어 제목과 회로 이미지를 나란히 배치 (비율 4:1)
-    col_title, col_img = st.columns([4, 2])
+    col_title, col_img = st.columns([4, 1])
 
     with col_title:
         st.title("Bode Plot Analyzer: CS + SF")
