@@ -23,7 +23,7 @@ with col_main:
     with col_img:
         # [해결책 1] GitHub의 웹뷰(blob) 주소를 원본 이미지(raw) 전용 주소로 변경
         raw_img_url = "https://raw.githubusercontent.com/Doojin83/circuit_edu_tools/main/circuit_diagram.png"
-        st.image(raw_img_url, width=200, caption="Circuit Layout")
+        st.image(raw_img_url, width=250, caption="Circuit Layout")
 
     # 사이드바에 슬라이더 배치
     st.sidebar.header("Circuit Parameters Setup")
