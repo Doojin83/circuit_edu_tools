@@ -19,7 +19,7 @@ with col_title:
 with col_img:
     # GitHub 저장소에 업로드된 회로 이미지 파일명을 적어주세요. (예: "circuit.png")
     # 파일이 정상적으로 불러와지지 않을 경우 경로를 확인해 주시면 됩니다.
-    st.image("circuit_diagram.png", width=140, caption="Circuit Layout")
+    st.image("https://github.com/Doojin83/circuit_edu_tools/blob/main/circuit_diagram.png", width=140, caption="Circuit Layout")
 
 # 사이드바에 슬라이더 배치
 st.sidebar.header("Circuit Parameters Setup")
