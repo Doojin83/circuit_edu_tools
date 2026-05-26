@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # Streamlit 레이아웃 설정
 st.set_page_config(layout="wide", page_title="Circuit Bode Plot Interactive Lab")
 
-# [개선] wide 레이아웃에서 메인 콘텐츠 영역이 너무 퍼지지 않도록 가로 폭 분할 구조 배치
+# wide 레이아웃에서 메인 콘텐츠 영역이 너무 퍼지지 않도록 가로 폭 분할 구조 배치
 col_main, _ = st.columns([3, 1])
 
 with col_main:
@@ -17,11 +17,11 @@ with col_main:
         st.title("Bode Plot Analyzer: CS + SF")
         st.markdown("""
         ### Cascade of CS Stage and Source Follower with Capacitor Coupling
-        Adjust the sliders to observe the real-time impact of circuit parameters on the Magnitude Bode Plot.
+        Adjust the sliders to observe the real-time impact of circuit parameters on the Magnitude and Phase Bode Plots.
         """)
 
     with col_img:
-        # [해결책 1] GitHub의 웹뷰(blob) 주소를 원본 이미지(raw) 전용 주소로 변경
+        # GitHub의 원본 이미지(raw) 전용 주소
         raw_img_url = "https://raw.githubusercontent.com/Doojin83/circuit_edu_tools/main/circuit_diagram.png"
         st.image(raw_img_url, width=250, caption="Circuit Layout")
 
@@ -35,9 +35,10 @@ with col_main:
     Ci_pf = st.sidebar.slider(r"Coupling Capacitor: $C_{i}$ (pF)", min_value=1.0, max_value=100.0, value=10.0, step=1.0)
     CL_pf = st.sidebar.slider(r"Load Capacitor: $C_L$ (pF)", min_value=0.1, max_value=50.0, value=5.0, step=0.1)
 
+    # 사이드바 최하단 크레딧 배치
     st.sidebar.markdown("---")
     st.sidebar.caption("Designed by Doojin Jang © 2026 ORBIT LAB. All Rights Reserved.")
-    
+
     # SI 단위계로 변환
     gm1 = gm1_ma * 1e-3
     gm2 = gm2_ma * 1e-3
@@ -83,20 +84,31 @@ with col_main:
     col2.metric("Low-Freq Pole (fp1)", f"{fp1_hz/1e3:.1f} kHz")
     col3.metric("High-Freq Pole (fp2)", f"{fp2_hz/1e6:.1f} MHz")
 
-    # 그래프 해상도 및 도면 비율 압축 설정
-    fig, ax = plt.subplots(figsize=(8, 3.5))
-    ax.semilogx(f_hz, mag, 'g-', lw=2.5, label="Stage Cascade Approach")
+    # 🛠️ [수정 구간] 2행 1열 구조의 서브플롯 생성 및 주파수축(X축) 공유 설정
+    fig, (ax_mag, ax_phase) = plt.subplots(2, 1, figsize=(8, 5.5), sharex=True)
 
-    # 폴(Pole) 위치 시각적 가이드 라인 추가
-    ax.axvline(fp1_hz, color='orange', linestyle=':', alpha=0.8, label=f'fp1 ({fp1_hz/1e3:.1f}kHz)')
-    ax.axvline(fp2_hz, color='red', linestyle=':', alpha=0.8, label=f'fp2 ({fp2_hz/1e6:.1f}MHz)')
+    # 1. 상단: 크기(Magnitude) 플롯
+    ax_mag.semilogx(f_hz, mag, 'g-', lw=2.5, label="Stage Cascade Approach")
+    ax_mag.axvline(fp1_hz, color='orange', linestyle=':', alpha=0.8, label=f'fp1 ({fp1_hz/1e3:.1f}kHz)')
+    ax_mag.axvline(fp2_hz, color='red', linestyle=':', alpha=0.8, label=f'fp2 ({fp2_hz/1e6:.1f}MHz)')
+    
+    ax_mag.set_title("Bode Plot from Cascaded Slide Equations", fontsize=14, pad=12)
+    ax_mag.set_ylabel("Magnitude (dB)", fontsize=12)
+    ax_mag.set_ylim(midband_gain_db - 40, midband_gain_db + 10)
+    ax_mag.grid(True, which='both', linestyle='--', alpha=0.5)
+    ax_mag.legend(loc="lower left")
 
-    ax.set_title("Magnitude Plot", fontsize=14, pad=15)
-    ax.set_xlabel("Frequency (Hz)", fontsize=12)
-    ax.set_ylabel("Magnitude (dB)", fontsize=12)
-    ax.set_ylim(midband_gain_db - 40, midband_gain_db + 10)
-    ax.grid(True, which='both', linestyle='--', alpha=0.5)
-    ax.legend(loc="lower left")
+    # 2. 하단: 위상(Phase) 플롯 추가
+    ax_phase.semilogx(f_hz, phase, 'b-', lw=2.5) # 위상은 전통적인 청색 라인으로 명시
+    ax_phase.axvline(fp1_hz, color='orange', linestyle=':', alpha=0.8)
+    ax_phase.axvline(fp2_hz, color='red', linestyle=':', alpha=0.8)
+    
+    ax_phase.set_xlabel("Frequency (Hz)", fontsize=12)
+    ax_phase.set_ylabel("Phase (deg)", fontsize=12)
+    ax_phase.grid(True, which='both', linestyle='--', alpha=0.5)
 
-    # [해결책 2] use_container_width=False를 주어 설정한 컴팩트 크기가 깨지지 않게 방지
+    # 각 플롯 레이블 및 타이틀 간격 최적화 정돈
+    plt.tight_layout()
+
+    # 컴팩트 크기가 화면 너비에 맞춰 강제로 늘어나는 현상 방지
     st.pyplot(fig, use_container_width=False)
