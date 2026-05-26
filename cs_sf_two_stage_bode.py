@@ -35,6 +35,9 @@ with col_main:
     Ci_pf = st.sidebar.slider(r"Coupling Capacitor: $C_{i}$ (pF)", min_value=1.0, max_value=100.0, value=10.0, step=1.0)
     CL_pf = st.sidebar.slider(r"Load Capacitor: $C_L$ (pF)", min_value=0.1, max_value=50.0, value=5.0, step=0.1)
 
+    st.sidebar.markdown("---")
+    st.sidebar.caption("Designed by Doojin Jang © 2026 ORBIT LAB. All Rights Reserved.")
+    
     # SI 단위계로 변환
     gm1 = gm1_ma * 1e-3
     gm2 = gm2_ma * 1e-3
@@ -88,7 +91,7 @@ with col_main:
     ax.axvline(fp1_hz, color='orange', linestyle=':', alpha=0.8, label=f'fp1 ({fp1_hz/1e3:.1f}kHz)')
     ax.axvline(fp2_hz, color='red', linestyle=':', alpha=0.8, label=f'fp2 ({fp2_hz/1e6:.1f}MHz)')
 
-    ax.set_title("Bode Plot from Cascaded Slide Equations", fontsize=14, pad=15)
+    ax.set_title("Magnitude Plot", fontsize=14, pad=15)
     ax.set_xlabel("Frequency (Hz)", fontsize=12)
     ax.set_ylabel("Magnitude (dB)", fontsize=12)
     ax.set_ylim(midband_gain_db - 40, midband_gain_db + 10)
