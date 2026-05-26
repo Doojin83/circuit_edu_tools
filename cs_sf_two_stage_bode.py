@@ -85,14 +85,14 @@ with col_main:
     col3.metric("High-Freq Pole (fp2)", f"{fp2_hz/1e6:.1f} MHz")
 
     # 🛠️ [수정 구간] 2행 1열 구조의 서브플롯 생성 및 주파수축(X축) 공유 설정
-    fig, (ax_mag, ax_phase) = plt.subplots(2, 1, figsize=(8, 5.5), sharex=True)
+    fig, (ax_mag, ax_phase) = plt.subplots(2, 1, figsize=(6, 4), sharex=True)
 
     # 1. 상단: 크기(Magnitude) 플롯
     ax_mag.semilogx(f_hz, mag, 'g-', lw=2.5, label="Stage Cascade Approach")
     ax_mag.axvline(fp1_hz, color='orange', linestyle=':', alpha=0.8, label=f'fp1 ({fp1_hz/1e3:.1f}kHz)')
     ax_mag.axvline(fp2_hz, color='red', linestyle=':', alpha=0.8, label=f'fp2 ({fp2_hz/1e6:.1f}MHz)')
     
-    ax_mag.set_title("Bode Plot from Cascaded Slide Equations", fontsize=14, pad=12)
+    ax_mag.set_title("Bode Plot of the Circuit", fontsize=14, pad=12)
     ax_mag.set_ylabel("Magnitude (dB)", fontsize=12)
     ax_mag.set_ylim(midband_gain_db - 40, midband_gain_db + 10)
     ax_mag.grid(True, which='both', linestyle='--', alpha=0.5)
