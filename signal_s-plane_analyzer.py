@@ -49,7 +49,7 @@ ax_time.plot(t, v_t, lw=2, color='#1f77b4')
 ax_time.set_title(title_time, fontsize=12)
 ax_time.set_xlabel('Time (t)')
 ax_time.set_ylabel('Amplitude')
-ax_time.set_xlim(0, 10)
+ax_time.set_xlim(0, 20)
 # 파형이 변할 때 축이 깨지지 않도록 동적 y축 설정
 max_v = max(np.max(v_t), 0.1)
 min_v = min(np.min(v_t), -0.1)
