@@ -13,6 +13,17 @@ st.markdown("""
 This app visualizes Fourier series synthesis, demonstrating how a collection of harmonic sine waves combines to form an ideal square wave.
 """)
 
+# --- 사이드바 또는 메인 화면 하단에 수식 추가 ---
+st.markdown("### 📐 Mathematical Foundation")
+st.markdown("The square pulse wave $f(t)$ is represented by the following Fourier series:")
+
+# LaTeX 수식 렌더링
+st.latex(r'''
+f(t) = \frac{1}{2} + \frac{2}{\pi} \sum_{n=1, 3, 5, \dots}^{N} \frac{1}{n} \sin(n \omega_0 t)
+''')
+
+st.markdown(f"where $\omega_0 = 2\pi f_0$ and the current maximum harmonic order is $N = {n_harmonics_max}$.")
+
 # 2. 사이드바 컨트롤러
 st.sidebar.header('Control Panel')
 n_harmonics_max = st.sidebar.slider(
@@ -25,6 +36,9 @@ n_harmonics_max = st.sidebar.slider(
 
 f0 = st.sidebar.number_input('Fundamental Frequency (Hz)', value=1.0, min_value=0.1, step=0.1)
 w0 = 2 * np.pi * f0
+
+st.sidebar.markdown("---")
+st.sidebar.caption("Designed by Doojin Jang © 2026 ORBIT LAB. All Rights Reserved.")
 
 # 3. 데이터 계산
 t = np.linspace(-0.5, 1.5, 1000)
