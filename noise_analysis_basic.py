@@ -18,8 +18,8 @@ tab_select = st.sidebar.radio(
     ["1. Stochastic & PDF", "2. PSD & kT/C Noise", "3. Correlated Sources"]
 )
 
-    st.sidebar.markdown("---")
-    st.sidebar.caption("Designed by Doojin Jang © 2026 ORBIT LAB. All Rights Reserved.")
+st.sidebar.markdown("---")
+st.sidebar.caption("Designed by Doojin Jang © 2026 ORBIT LAB. All Rights Reserved.")
 # ----------------------------------------------------------------
 # Tab 1: Stochastic Process & PDF
 # ----------------------------------------------------------------
