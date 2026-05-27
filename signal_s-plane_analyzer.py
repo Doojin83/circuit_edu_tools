@@ -12,8 +12,11 @@ st.sidebar.header("Adjustment of Parameters")
 alpha = st.sidebar.slider('Attenuation Factor ($\\alpha$)', min_value=0.0, max_value=10.0, value=2.0, step=0.1)
 omega_0 = st.sidebar.slider('Natural Frequency ($\\omega_0$)', min_value=0.1, max_value=10.0, value=5.0, step=0.1)
 
+st.sidebar.markdown("---")
+st.sidebar.caption("Designed by Doojin Jang © 2026 ORBIT LAB. All Rights Reserved.")
+
 # 2. 데이터 계산 및 시스템 상태 판별
-t = np.linspace(0, 10, 1000)
+t = np.linspace(0, 20, 2000)
 
 if alpha < omega_0:
     # 2.1 감쇠 미달 (Underdamped): 복소 극점 쌍, 댐핑 진동
