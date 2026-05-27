@@ -8,9 +8,10 @@ st.title("Signal in Time Domain & Pole Location in s-plane")
 
 # 1. 왼쪽 사이드바에 UI(슬라이더) 배치
 st.sidebar.header("Adjustment of Parameters")
-# 과감쇠를 쉽게 관찰할 수 있도록 alpha의 범위를 넓혔습니다.
 alpha = st.sidebar.slider('Attenuation Factor ($\\alpha$)', min_value=0.0, max_value=10.0, value=2.0, step=0.1)
-omega_0 = st.sidebar.slider('Natural Frequency ($\\omega_0$)', min_value=0.1, max_value=10.0, value=5.0, step=0.1)
+
+# [수정] 주파수 시작점(min_value)을 0.0으로 변경했습니다.
+omega_0 = st.sidebar.slider('Natural Frequency ($\\omega_0$)', min_value=0.0, max_value=10.0, value=5.0, step=0.1)
 
 st.sidebar.markdown("---")
 st.sidebar.caption("Designed by Doojin Jang © 2026 ORBIT LAB. All Rights Reserved.")
@@ -50,6 +51,7 @@ ax_time.set_title(title_time, fontsize=12)
 ax_time.set_xlabel('Time (t)')
 ax_time.set_ylabel('Amplitude')
 ax_time.set_xlim(0, 20)
+
 # 파형이 변할 때 축이 깨지지 않도록 동적 y축 설정
 max_v = max(np.max(v_t), 0.1)
 min_v = min(np.min(v_t), -0.1)
