@@ -17,6 +17,7 @@ tab_select = st.sidebar.radio(
     "Select a Lecture Topic:",
     ["1. Stochastic & PDF", "2. PSD & kT/C Noise", "3. Correlated Sources"]
 )
+
     st.sidebar.markdown("---")
     st.sidebar.caption("Designed by Doojin Jang © 2026 ORBIT LAB. All Rights Reserved.")
 # ----------------------------------------------------------------
@@ -28,9 +29,9 @@ if tab_select == "1. Stochastic & PDF":
     # Key Checkpoints Box
     st.info("""
     ### 🔍 Key Verification Checkpoints
-    * **Temporal Randomness:** The exact amplitude at any specific time instance $t_1$ is completely unpredictable[cite: 21, 81].
-    * **Statistical Bound:** Although individual values are random, the overall amplitude bounds are highly predictable and rarely exceed $\pm4\\sigma$ ($99.99\%$)[cite: 76, 81].
-    * **Dynamic Scaling:** Adjusting the **Sigma (𝛔)** slider alters the absolute fluctuation wave, but the relative percentage within the $\pm1\\sigma$, $\pm2\\sigma$, and $\pm3\\sigma$ boundaries remains perfectly constant[cite: 66, 67].
+    * **Temporal Randomness:** The exact amplitude at any specific time instance $t_1$ is completely unpredictable.
+    * **Statistical Bound:** Although individual values are random, the overall amplitude bounds are highly predictable and rarely exceed $\pm4\\sigma$ ($99.99\%$).
+    * **Dynamic Scaling:** Adjusting the **Sigma (𝛔)** slider alters the absolute fluctuation wave, but the relative percentage within the $\pm1\\sigma$, $\pm2\\sigma$, and $\pm3\\sigma$ boundaries remains perfectly constant.
     """)
     
     col1, col2 = st.columns([2, 1])
@@ -87,9 +88,9 @@ elif tab_select == "2. PSD & kT/C Noise":
     # Key Checkpoints Box
     st.info("""
     ### 🔍 Key Verification Checkpoints
-    * **R-Independence Proof:** Total integrated output RMS noise depends strictly on $\\sqrt{kT/C}$ and is completely independent of the resistor value $R$[cite: 210].
-    * **Bandwidth Trade-off:** Increasing $R$ drives up the white noise floor ($4kTR$)[cite: 206]. However, it simultaneously narrows the filter bandwidth ($f_c = 1/(2\\pi RC)$)[cite: 207, 210].
-    * **Constant Area:** Observe the lower chart; sweeping $R$ changes the shape of the spectrum, but the total integrated area (purple shading) stays invariant[cite: 209, 210].
+    * **R-Independence Proof:** Total integrated output RMS noise depends strictly on $\\sqrt{kT/C}$ and is completely independent of the resistor value $R$.
+    * **Bandwidth Trade-off:** Increasing $R$ drives up the white noise floor ($4kTR$). However, it simultaneously narrows the filter bandwidth ($f_c = 1/(2\\pi RC)$).
+    * **Constant Area:** Observe the lower chart; sweeping $R$ changes the shape of the spectrum, but the total integrated area (purple shading) stays invariant.
     """)
     
     col1, col2 = st.columns([1, 2])
@@ -153,9 +154,9 @@ elif tab_select == "3. Correlated Sources":
     # Key Checkpoints Box
     st.info("""
     ### 🔍 Key Verification Checkpoints
-    * **Superposition Violation:** Noise sources cannot be added linearly like raw voltage or current because noise is calculated using mean squared power[cite: 219, 235].
-    * **Uncorrelated Case (𝛒 = 0):** The 3rd cross-term cancels out entirely during long-term integration, making the actual total power equal to the simple arithmetic sum ($P_{av1} + P_{av2}$)[cite: 222, 237].
-    * **Correlated Case (𝛒 ≠ 0):** The 3rd term becomes significant[cite: 221, 237]. Fully correlated sources ($\\rho = 1$) cause constructive addition, while anti-correlated sources ($\\rho = -1$) provide total cancellation.
+    * **Superposition Violation:** Noise sources cannot be added linearly like raw voltage or current because noise is calculated using mean squared power.
+    * **Uncorrelated Case (𝛒 = 0):** The 3rd cross-term cancels out entirely during long-term integration, making the actual total power equal to the simple arithmetic sum ($P_{av1} + P_{av2}$).
+    * **Correlated Case (𝛒 ≠ 0):** The 3rd term becomes significant. Fully correlated sources ($\\rho = 1$) cause constructive addition, while anti-correlated sources ($\\rho = -1$) provide total cancellation.
     """)
     
     col1, col2 = st.columns([1, 2])
