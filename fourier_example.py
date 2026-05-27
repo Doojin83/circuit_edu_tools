@@ -8,22 +8,22 @@ import matplotlib.pyplot as plt
 # 1. 페이지 설정
 st.set_page_config(page_title="Fourier Series Synthesis", layout="wide")
 
-st.title('📊 푸리에 급수: 사인파로 펄스파 만들기')
+st.title('Fourier Series: Synthesizing a Pulse Wave from Sine Waves')
 st.markdown("""
-이 앱은 여러 주파수의 사인파(하모닉스)를 쌓아가며 이상적인 **사각 펄스 파형(Square Wave)**에 가까워지는 과정을 시각화합니다.
+This app visualizes Fourier series synthesis, demonstrating how a collection of harmonic sine waves combines to form an ideal square wave.
 """)
 
 # 2. 사이드바 컨트롤러
-st.sidebar.header('조절 패널')
+st.sidebar.header('Control Panel')
 n_harmonics_max = st.sidebar.slider(
-    '합성에 사용할 최대 하모닉스 차수 (N)',
+    'Maximum Harmonic Order (N)',
     min_value=1,
     max_value=99,
     value=1,
     step=2
 )
 
-f0 = st.sidebar.number_input('기본 주파수 (Hz)', value=1.0, min_value=0.1, step=0.1)
+f0 = st.sidebar.number_input('Fundamental Frequency (Hz)', value=1.0, min_value=0.1, step=0.1)
 w0 = 2 * np.pi * f0
 
 # 3. 데이터 계산
@@ -80,7 +80,7 @@ plt.close(fig)
 
 # 5. 하단 텍스트 설명 (웹 브라우저 렌더링 영역이므로 한글 깨짐 없음)
 st.markdown("""
-### 💡 어떻게 작동하나요?
-* **하모닉스 누적**: 고주파 성분이 더해질수록 에지가 날카로워집니다.
-* **깁스 현상**: 불연속점 근처의 오버슈트는 유한한 차수 합산에서 기인합니다.
+### 💡 How Does It Work?
+* **Harmonic Accumulation:** As higher-frequency components are added, the transitions (edges) become sharper and faster.
+* **Gibbs Phenomenon:** The ringing or overshoot near the discontinuities occurs because we are summing a finite number of harmonic terms.
 """)
