@@ -22,7 +22,7 @@ st.latex(r'''
 f(t) = \frac{1}{2} + \frac{2}{\pi} \sum_{n=1, 3, 5, \dots}^{N} \frac{1}{n} \sin(n \omega_0 t)
 ''')
 
-st.markdown(fr"where $\omega_0 = 2\pi f_0$ and the current maximum harmonic order is $N = {n_harmonics}$.")
+#st.markdown(fr"where $\omega_0 = 2\pi f_0$ and the current maximum harmonic order is $N = {n_harmonics}$.")
 
 # 2. 사이드바 컨트롤러
 st.sidebar.header('Control Panel')
