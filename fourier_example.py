@@ -1,44 +1,87 @@
+import streamlit as st
 import numpy as np
+import matplotlib
+# 클라우드 서버 환경에서 GUI 창이 뜨지 않도록 비대화형(Non-interactive) 백엔드 강제 지정
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-# 1. 시간축 및 기본 파라미터 설정
-t = np.linspace(-0.5, 1.5, 1000)
-f0 = 1                      # 기본 주파수 (1 Hz)
-w0 = 2 * np.pi * f0         # 각주파수
+# 1. 페이지 설정 (최상단 유지)
+st.set_page_config(page_title="푸리에 급수 합성 시각화", layout="wide")
 
-# 2. 비교 대상인 이상적인 펄스 파형 (Square wave, 0 to 1)
+st.title('📊 푸리에 급수: 사인파로 펄스파 만들기')
+st.markdown("""
+이 앱은 여러 주파수의 사인파(하모닉스)를 쌓아가며 이상적인 **사각 펄스 파형(Square Wave)**에 가까워지는 과정을 시각화합니다.
+""")
+
+# 2. 사이드바 컨트롤러
+st.sidebar.header('조절 패널')
+n_harmonics_max = st.sidebar.slider(
+    '합성에 사용할 최대 하모닉스 차수 (N)',
+    min_value=1,
+    max_value=99,
+    value=1,
+    step=2
+)
+
+f0 = st.sidebar.number_input('기본 주파수 (Hz)', value=1.0, min_value=0.1, step=0.1)
+w0 = 2 * np.pi * f0
+
+# 3. 데이터 계산
+t = np.linspace(-0.5, 1.5, 1000)
 ideal_pulse = 0.5 + 0.5 * np.sign(np.sin(w0 * t))
 
-# 3. 누적할 하모닉스 차수 설정 (홀수 차수만 기여함)
-harmonics_counts = [1, 3, 7, 19, 49]
+accumulated_wave = np.ones_like(t) * 0.5
+current_harmonics_list = []
 
-# 4. 시각화를 위한 서브플롯 생성
-fig, axes = plt.subplots(len(harmonics_counts), 1, figsize=(10, 12), sharex=True)
+for n in range(1, n_harmonics_max + 1, 2):
+    harmonic_component = (2 / (np.pi * n)) * np.sin(n * w0 * t)
+    current_harmonics_list.append((n, harmonic_component))
+    accumulated_wave += harmonic_component
 
-for i, N in enumerate(harmonics_counts):
-    # DC 성분 (1/2)으로 시작
-    f_t = np.ones_like(t) * 0.5
-    
-    # 1부터 N까지의 홀수 하모닉스를 누적 합산
-    for n in range(1, N + 1, 2):
-        f_t += (2 / (np.pi * n)) * np.sin(n * w0 * t)
-    
-    # 이상적인 펄스 파형을 점선으로 표시
-    axes[i].plot(t, ideal_pulse, 'k--', alpha=0.5, label='Ideal Pulse Wave')
-    
-    # 푸리에 급수로 합성된 파형 표시
-    axes[i].plot(t, f_t, color='blue', linewidth=2, label=f'Sum of harmonics up to n={N}')
-    
-    # 그래프 스타일링
-    axes[i].set_ylabel('Amplitude')
-    axes[i].grid(True, linestyle=':', alpha=0.6)
-    axes[i].legend(loc='upper right')
-    axes[i].set_ylim(-0.3, 1.3)
-    axes[i].set_title(f'Fourier Series Synthesis: N = {N} (Up to {N}th Harmonic)', fontsize=10)
+# 4. 그래프 플로팅 (명시적 Figure 관리 및 복사본 생성 방지)
+fig, axes = plt.subplots(1, 2, figsize=(15, 5), sharey=True)
 
-# 최하단 그래프에 X축 레이블 추가
-axes[-1].set_xlabel('Time (seconds)')
+# [왼쪽 그래프]
+axes[0].set_title(f'개별 하모닉스 성분 ($n=1$부터 $n={n_harmonics_max}$까지)')
+if n_harmonics_max > 7:
+    # 중복 인덱스 제거를 위해 set 사용 후 정렬
+    indices_to_show = sorted(list(set([0, 1, 2, len(current_harmonics_list)//2, -1])))
+else:
+    indices_to_show = list(range(len(current_harmonics_list)))
+
+for i in indices_to_show:
+    if i < len(current_harmonics_list):
+        n_val, comp = current_harmonics_list[i]
+        linewidth = 2.5 if i == len(current_harmonics_list)-1 else 1.0
+        alpha = 1.0 if i == len(current_harmonics_list)-1 else 0.4
+        axes[0].plot(t, comp, label=f'n={n_val}', linewidth=linewidth, alpha=alpha)
+
+axes[0].set_ylabel('진폭 (Amplitude)')
+axes[0].set_xlabel('시간 (Time [s])')
+axes[0].grid(True, linestyle=':', alpha=0.6)
+if n_harmonics_max < 15:
+    axes[0].legend(loc='upper right', fontsize='small')
+
+# [오른쪽 그래프]
+axes[1].set_title(f'N={n_harmonics_max}까지 합성된 파형')
+axes[1].plot(t, accumulated_wave, color='blue', linewidth=2.0, label='합성 파형')
+axes[1].plot(t, ideal_pulse, 'k--', alpha=0.4, label='이상적 펄스파')
+axes[1].set_xlabel('시간 (Time [s])')
+axes[1].set_ylim(-0.3, 1.3)
+axes[1].grid(True, linestyle=':', alpha=0.6)
+axes[1].legend(loc='upper right')
+
 plt.tight_layout()
 
-# 이미지 파일로 저장
-plt.savefig('fourier_pulse_synthesis.png', dpi=300)
+# st.pyplot에 인자를 명시하고, 내부적으로 렌더링 후 피겨를 비우도록 설정
+st.pyplot(fig, clear_figure=True)
+
+# 메모리 누수 방지를 위해 사용한 figure 닫기
+plt.close(fig)
+
+# 5. 하단 텍스트 설명
+st.markdown("""
+### 💡 어떻게 작동하나요?
+* **하모닉스 누적**: 고주파 성분이 더해질수록 에지가 날카로워집니다.
+* **깁스 현상**: 불연속점 근처의 오버슈트는 유한한 차수 합산에서 기인합니다.
+""")
